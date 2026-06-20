@@ -1,0 +1,33 @@
+const psData = {
+    title: "POLICE STATIONS",
+    partners: [
+        { name: "Officer Name", rank: "I.C", ps_name: "ANANDAPUR", mobile: "0000000000", whatsapp: "910000000000", landline: "03222-XXXXXX" },
+        { name: "Chandan Thakur", rank: "I.C", ps_name: "BELDA", mobile: "9614367763", whatsapp: "919614367763", landline: "03222-255967" },
+        { name: "Officer Name", rank: "O.C", ps_name: "CHANDRA", mobile: "0000000000", whatsapp: "910000000000", landline: "" },
+        { name: "Officer Name", rank: "I.C", ps_name: "CHANDRAKONA", mobile: "0000000000", whatsapp: "910000000000", landline: "03225-266224" },
+        { name: "Officer Name", rank: "I.C", ps_name: "CYBER CRIME", mobile: "0000000000", whatsapp: "910000000000", landline: "03222-261300" },
+        { name: "Officer Name", rank: "I.C", ps_name: "DANTAN", mobile: "0000000000", whatsapp: "910000000000", landline: "03229-253225" },
+        { name: "Officer Name", rank: "I.C", ps_name: "DASPUR", mobile: "0000000000", whatsapp: "910000000000", landline: "03225-252222" },
+        { name: "Officer Name", rank: "I.C", ps_name: "DEBRA", mobile: "0000000000", whatsapp: "910000000000", landline: "03222-243224" },
+        { name: "Officer Name", rank: "I.C", ps_name: "GARHBETA", mobile: "0000000000", whatsapp: "910000000000", landline: "03227-265028" },
+        { name: "Officer Name", rank: "I.C", ps_name: "GHATAL", mobile: "0000000000", whatsapp: "910000000000", landline: "03225-255030" },
+        { name: "Officer Name", rank: "I.C", ps_name: "GOALTORE", mobile: "0000000000", whatsapp: "910000000000", landline: "03227-281224" },
+        { name: "Officer Name", rank: "I.C", ps_name: "GOPIBALLAVPUR", mobile: "0000000000", whatsapp: "910000000000", landline: "" },
+        { name: "Officer Name", rank: "O.C", ps_name: "GURIGURIPAL", mobile: "0000000000", whatsapp: "910000000000", landline: "" },
+        { name: "Officer Name", rank: "I.C", ps_name: "KESHIARY", mobile: "0000000000", whatsapp: "910000000000", landline: "03223-261234" },
+        { name: "Officer Name", rank: "I.C", ps_name: "KESHPUR", mobile: "0000000000", whatsapp: "910000000000", landline: "03227-235224" },
+        { name: "Officer Name", rank: "I.C", ps_name: "KHARAGPUR LOCAL", mobile: "0000000000", whatsapp: "910000000000", landline: "03222-253245" },
+        { name: "Officer Name", rank: "I.C", ps_name: "KHARAGPUR TOWN", mobile: "0000000000", whatsapp: "910000000000", landline: "03222-255104" },
+        { name: "Officer Name", rank: "O.C", ps_name: "KHARAGPUR WOMEN", mobile: "0000000000", whatsapp: "910000000000", landline: "03222-227655" },
+        { name: "Officer Name", rank: "I.C", ps_name: "KOTWALI", mobile: "0000000000", whatsapp: "910000000000", landline: "03222-255100" },
+        { name: "Officer Name", rank: "O.C", ps_name: "MIDNAPORE WOMEN", mobile: "0000000000", whatsapp: "910000000000", landline: "03222-261313" },
+        { name: "Officer Name", rank: "O.C", ps_name: "MOHANPUR", mobile: "0000000000", whatsapp: "910000000000", landline: "" },
+        { name: "Officer Name", rank: "I.C", ps_name: "NARAYANGARH", mobile: "0000000000", whatsapp: "910000000000", landline: "03222-246224" },
+        { name: "Officer Name", rank: "I.C", ps_name: "NAYAGRAM", mobile: "0000000000", whatsapp: "910000000000", landline: "" },
+        { name: "Officer Name", rank: "I.C", ps_name: "PINGLA", mobile: "0000000000", whatsapp: "910000000000", landline: "03222-241224" },
+        { name: "Officer Name", rank: "I.C", ps_name: "SABANG", mobile: "0000000000", whatsapp: "910000000000", landline: "03222-248222" },
+        { name: "Officer Name", rank: "I.C", ps_name: "SALBONI", mobile: "0000000000", whatsapp: "910000000000", landline: "03227-254224" },
+        { name: "Officer Name", rank: "I.C", ps_name: "SANKRAIL", mobile: "0000000000", whatsapp: "910000000000", landline: "" },
+        { name: "Officer Name", rank: "I.C", ps_name: "JHARGRAM", mobile: "0000000000", whatsapp: "910000000000", landline: "" }
+    ]
+};
