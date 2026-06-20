@@ -46,34 +46,9 @@
         }
         .main-title { font-size: clamp(24px, 6vw, 40px); font-weight: 900; margin: 0; text-transform: uppercase; }
 
-        /* लोकेशन सिलेक्शन कंटेनर - बिल्कुल नया जोड़ा गया बिना स्टाइल बिगाड़े */
-        .location-selector-container {
-            background: var(--dark-bg);
-            padding: 15px 10px 5px 10px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .location-select {
-            padding: 10px;
-            border-radius: 10px;
-            font-weight: 900;
-            border: 3px solid var(--light-green);
-            background-color: var(--card-bg);
-            color: var(--text-color);
-            font-size: 13px;
-            min-width: 140px;
-            flex: 1;
-            max-width: 200px;
-            cursor: pointer;
-            outline: none;
-        }
-
         .top-actions {
             background: var(--dark-bg);
-            padding: 15px 10px;
+            padding: 15px 10px 5px 10px;
             display: flex;
             justify-content: center;
             gap: 8px; 
@@ -89,6 +64,47 @@
         .mode-btn { background-color: var(--light-green); color: #000; box-shadow: 0 4px 0 var(--green-shadow); }
         .links-btn.blue { background-color: var(--btn-blue); box-shadow: 0 4px 0 #008ba3; color: white; }
         .links-btn.orange { background-color: var(--btn-orange); box-shadow: 0 4px 0 #c67600; color: white; }
+
+        /* नया सेक्शन: लोकेशन और सर्च बटन के लिए */
+        .location-section {
+            background: var(--dark-bg);
+            padding: 5px 10px 15px 10px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .location-select {
+            padding: 12px 10px;
+            border-radius: 10px;
+            font-weight: 900;
+            border: 3px solid var(--light-green);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: 12px;
+            min-width: 100px;
+            flex: 1;
+            max-width: 150px;
+            cursor: pointer;
+            outline: none;
+            text-transform: uppercase;
+        }
+        .search-btn {
+            background-color: var(--light-green);
+            color: #000;
+            box-shadow: 0 4px 0 var(--green-shadow);
+            padding: 12px 10px;
+            border-radius: 10px;
+            font-weight: 900;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            min-width: 100px;
+            flex: 1;
+            max-width: 150px;
+            text-align: center;
+            text-transform: uppercase;
+        }
 
         /* Modals */
         .modal {
@@ -143,34 +159,38 @@
     <div class="main-subtitle">PASCHIM MEDINIPUR</div>
 </div>
 
-<div class="location-selector-container">
-    <select id="stateSelect" class="location-select" onchange="handleLocationChange()">
-        <option value="">-- STATE (राज्य) --</option>
+<!-- 3 मुख्य बटन्स -->
+<div class="top-actions">
+    <button class="mode-btn" onclick="toggleNightMode()" id="modeBtn">🌙 NIGHT MODE</button>
+    <button class="links-btn blue" onclick="toggleModal('quickLinksModal')">🌐 QUICK LINKS</button>
+    <button class="links-btn orange" onclick="toggleModal('importantLinksModal')">📌 IMPORTANT SITES</button>
+</div>
+
+<!-- ठीक बटन्स के नीचे नया स्टेट, डिस्ट्रिक्ट, सिटी और सर्च बटन सेक्शन -->
+<div class="location-section">
+    <select id="stateSelect" class="location-select">
+        <option value="">-- STATE --</option>
         <option value="WB" selected>West Bengal</option>
         <option value="BR">Bihar</option>
         <option value="JH">Jharkhand</option>
         <option value="UP">Uttar Pradesh</option>
     </select>
     
-    <select id="districtSelect" class="location-select" onchange="handleLocationChange()">
-        <option value="">-- DISTRICT (ज़िला) --</option>
+    <select id="districtSelect" class="location-select">
+        <option value="">-- DISTRICT --</option>
         <option value="PM" selected>Paschim Medinipur</option>
         <option value="PO">Purba Medinipur</option>
         <option value="KO">Kolkata</option>
     </select>
 
-    <select id="citySelect" class="location-select" onchange="handleLocationChange()">
-        <option value="">-- CITY (शहर) --</option>
+    <select id="citySelect" class="location-select">
+        <option value="">-- CITY --</option>
         <option value="KGP" selected>Kharagpur</option>
         <option value="MID">Medinipur</option>
         <option value="GHA">Ghatal</option>
     </select>
-</div>
 
-<div class="top-actions">
-    <button class="mode-btn" onclick="toggleNightMode()" id="modeBtn">🌙 NIGHT MODE</button>
-    <button class="links-btn blue" onclick="toggleModal('quickLinksModal')">🌐 QUICK LINKS</button>
-    <button class="links-btn orange" onclick="toggleModal('importantLinksModal')">📌 IMPORTANT SITES</button>
+    <button class="search-btn" onclick="triggerLocationSearch()">🔍 SEARCH</button>
 </div>
 
 <div id="quickLinksModal" class="modal">
@@ -215,12 +235,12 @@
 <script>
     const shopData = { ...aspData, ...sdpoData, "police_stations": psData };
 
-    // लोकेशन बदलने पर हैंडल करने के लिए नया फंक्शन (ज़रूरत के अनुसार इसमें डायनामिक डेटा लोड लगा सकते हैं)
-    function handleLocationChange() {
+    // सर्च बटन दबाने पर चलने वाला नया फंक्शन
+    function triggerLocationSearch() {
         const state = document.getElementById('stateSelect').value;
         const district = document.getElementById('districtSelect').value;
         const city = document.getElementById('citySelect').value;
-        console.log(`Selected Location: State=${state}, District=${district}, City=${city}`);
+        alert(`Searching for Location:\nState: ${state}\nDistrict: ${district}\nCity: ${city}`);
     }
 
     function toggleNightMode() {
