@@ -159,35 +159,24 @@
     <div class="main-subtitle">PASCHIM MEDINIPUR</div>
 </div>
 
-<!-- 3 मुख्य बटन्स -->
 <div class="top-actions">
     <button class="mode-btn" onclick="toggleNightMode()" id="modeBtn">🌙 NIGHT MODE</button>
     <button class="links-btn blue" onclick="toggleModal('quickLinksModal')">🌐 QUICK LINKS</button>
     <button class="links-btn orange" onclick="toggleModal('importantLinksModal')">📌 IMPORTANT SITES</button>
 </div>
 
-<!-- ठीक बटन्स के नीचे नया स्टेट, डिस्ट्रिक्ट, सिटी और सर्च बटन सेक्शन -->
+<!-- डायनामिक स्टेट, डिस्ट्रिक्ट, सिटी सिलेक्शन -->
 <div class="location-section">
-    <select id="stateSelect" class="location-select">
+    <select id="stateSelect" class="location-select" onchange="populateDistricts()">
         <option value="">-- STATE --</option>
-        <option value="WB" selected>West Bengal</option>
-        <option value="BR">Bihar</option>
-        <option value="JH">Jharkhand</option>
-        <option value="UP">Uttar Pradesh</option>
     </select>
     
-    <select id="districtSelect" class="location-select">
+    <select id="districtSelect" class="location-select" onchange="populateCities()">
         <option value="">-- DISTRICT --</option>
-        <option value="PM" selected>Paschim Medinipur</option>
-        <option value="PO">Purba Medinipur</option>
-        <option value="KO">Kolkata</option>
     </select>
 
     <select id="citySelect" class="location-select">
         <option value="">-- CITY --</option>
-        <option value="KGP" selected>Kharagpur</option>
-        <option value="MID">Medinipur</option>
-        <option value="GHA">Ghatal</option>
     </select>
 
     <button class="search-btn" onclick="triggerLocationSearch()">🔍 SEARCH</button>
@@ -235,12 +224,121 @@
 <script>
     const shopData = { ...aspData, ...sdpoData, "police_stations": psData };
 
-    // सर्च बटन दबाने पर चलने वाला नया फंक्शन
+    // पूरे भारत के राज्यों, जिलों और मुख्य शहरों का डेटाबेस संरचना
+    const indiaData = {
+        "Andhra Pradesh": { "Visakhapatnam": ["Visakhapatnam", "Gajuwaka"], "Vijayawada": ["Vijayawada"], "Guntur": ["Guntur"] },
+        "Arunachal Pradesh": { "Itanagar": ["Itanagar"], "Naharlagun": ["Naharlagun"] },
+        "Assam": { "Kamrup Metro": ["Guwahati"], "Dibrugarh": ["Dibrugarh"], "Silchar": ["Silchar"] },
+        "Bihar": { "Patna": ["Patna", "Danapur"], "Gaya": ["Gaya", "Bodh Gaya"], "Muzaffarpur": ["Muzaffarpur"] },
+        "Chhattisgarh": { "Raipur": ["Raipur"], "Durg": ["Bhilai", "Durg"], "Bilaspur": ["Bilaspur"] },
+        "Goa": { "North Goa": ["Panaji", "Mapusa"], "South Goa": ["Margao", "Vasco da Gama"] },
+        "Gujarat": { "Ahmedabad": ["Ahmedabad"], "Surat": ["Surat"], "Vadodara": ["Vadodara"], "Rajkot": ["Rajkot"] },
+        "Haryana": { "Gurugram": ["Gurugram"], "Faridabad": ["Faridabad"], "Ambala": ["Ambala"] },
+        "Himachal Pradesh": { "Shimla": ["Shimla"], "Kangra": ["Dharamshala"], "Mandi": ["Mandi"] },
+        "Jharkhand": { "Ranchi": ["Ranchi"], "East Singhbhum": ["Jamshedpur"], "Dhanbad": ["Dhanbad"] },
+        "Karnataka": { "Bengaluru Urban": ["Bengaluru"], "Mysuru": ["Mysuru"], "Hubli-Dharwad": ["Hubli"] },
+        "Kerala": { "Thiruvananthapuram": ["Thiruvananthapuram"], "Ernakulam": ["Kochi"], "Kozhikode": ["Kozhikode"] },
+        "Madhya Pradesh": { "Indore": ["Indore"], "Bhopal": ["Bhopal"], "Gwalior": ["Gwalior"], "Jabalpur": ["Jabalpur"] },
+        "Maharashtra": { "Mumbai City": ["Mumbai"], "Pune": ["Pune"], "Nagpur": ["Nagpur"], "Thane": ["Thane"] },
+        "Manipur": { "Imphal West": ["Imphal"], "Churachandpur": ["Churachandpur"] },
+        "Meghalaya": { "East Khasi Hills": ["Shillong"], "West Garo Hills": ["Tura"] },
+        "Mizoram": { "Aizawl": ["Aizawl"], "Lunglei": ["Lunglei"] },
+        "Nagaland": { "Dimapur": ["Dimapur"], "Kohima": ["Kohima"] },
+        "Odisha": { "Khordha": ["Bhubaneswar"], "Cuttack": ["Cuttack"], "Ganjam": ["Berhampur"] },
+        "Punjab": { "Amritsar": ["Amritsar"], "Ludhiana": ["Ludhiana"], "Jalandhar": ["Jalandhar"] },
+        "Rajasthan": { "Jaipur": ["Jaipur"], "Jodhpur": ["Jodhpur"], "Udaipur": ["Udaipur"], "Kota": ["Kota"] },
+        "Sikkim": { "Gangtok": ["Gangtok"], "Namchi": ["Namchi"] },
+        "Tamil Nadu": { "Chennai": ["Chennai"], "Coimbatore": ["Coimbatore"], "Madurai": ["Madurai"] },
+        "Telangana": { "Hyderabad": ["Hyderabad"], "Warangal": ["Warangal"], "Nizamabad": ["Nizamabad"] },
+        "Tripura": { "West Tripura": ["Agartala"], "Unakoti": ["Kailashahar"] },
+        "Uttar Pradesh": { "Lucknow": ["Lucknow"], "Kanpur Nagar": ["Kanpur"], "Gautam Buddha Nagar": ["Noida"], "Agra": ["Agra"], "Varanasi": ["Varanasi"] },
+        "Uttarakhand": { "Dehradun": ["Dehradun", "Rishikesh"], "Nainital": ["Haldwani", "Nainital"] },
+        "West Bengal": { 
+            "Paschim Medinipur": ["Kharagpur", "Medinipur", "Ghatal", "Belda"], 
+            "Purba Medinipur": ["Tamluk", "Haldia", "Digha"], 
+            "Kolkata": ["Kolkata"] 
+        }
+    };
+
+    // स्टेट ड्रॉपडाउन को लोड करना
+    function populateStates() {
+        const stateSelect = document.getElementById('stateSelect');
+        Object.keys(indiaData).sort().forEach(state => {
+            let opt = document.createElement('option');
+            opt.value = state;
+            opt.innerText = state;
+            stateSelect.appendChild(opt);
+        });
+    }
+
+    // स्टेट सेलेक्ट करने पर डिस्ट्रिक्ट लोड करना
+    function populateDistricts() {
+        const stateSelect = document.getElementById('stateSelect').value;
+        const districtSelect = document.getElementById('districtSelect');
+        const citySelect = document.getElementById('citySelect');
+        
+        districtSelect.innerHTML = '<option value="">-- DISTRICT --</option>';
+        citySelect.innerHTML = '<option value="">-- CITY --</option>';
+        
+        if (stateSelect && indiaData[stateSelect]) {
+            Object.keys(indiaData[stateSelect]).sort().forEach(district => {
+                let opt = document.createElement('option');
+                opt.value = district;
+                opt.innerText = district;
+                districtSelect.appendChild(opt);
+            });
+        }
+    }
+
+    // डिस्ट्रिक्ट सेलेक्ट करने पर सिटी लोड करना
+    function populateCities() {
+        const stateSelect = document.getElementById('stateSelect').value;
+        const districtSelect = document.getElementById('districtSelect').value;
+        const citySelect = document.getElementById('citySelect');
+        
+        citySelect.innerHTML = '<option value="">-- CITY --</option>';
+        
+        if (stateSelect && districtSelect && indiaData[stateSelect][districtSelect]) {
+            indiaData[stateSelect][districtSelect].sort().forEach(city => {
+                let opt = document.createElement('option');
+                opt.value = city;
+                opt.innerText = city;
+                citySelect.appendChild(opt);
+            });
+        }
+    }
+
+    // सर्च बटन पर केवल उस सिटी का डेटा फ़िल्टर करना
     function triggerLocationSearch() {
-        const state = document.getElementById('stateSelect').value;
-        const district = document.getElementById('districtSelect').value;
-        const city = document.getElementById('citySelect').value;
-        alert(`Searching for Location:\nState: ${state}\nDistrict: ${district}\nCity: ${city}`);
+        const city = document.getElementById('citySelect').value.toLowerCase();
+        
+        if (!city) {
+            // अगर कोई सिटी नहीं चुनी, तो सब रीसेट करके सब दिखाओ
+            document.querySelectorAll('.list-card').forEach(card => card.style.style.display = "block");
+            return;
+        }
+
+        const activeSection = document.querySelector('.section.active');
+        if (activeSection) {
+            const cards = activeSection.querySelectorAll('.list-card');
+            cards.forEach(card => {
+                const isMatch = card.innerText.toLowerCase().includes(city);
+                card.style.display = isMatch ? "block" : "none";
+                
+                // अगर मैच मिलता है तो पुलिस स्टेशन की हेडिंग को ऑटोमैटिक खोलें
+                if (isMatch) {
+                    const parent = card.closest('.ps-content');
+                    if (parent) {
+                        parent.classList.add('open');
+                        const header = parent.previousElementSibling;
+                        if (header) {
+                            const icon = header.querySelector('.ps-icon');
+                            if (icon) icon.innerText = '▲';
+                        }
+                    }
+                }
+            });
+        }
     }
 
     function toggleNightMode() {
@@ -286,6 +384,7 @@
             document.body.classList.add('night-mode');
             updateModeButton(true);
         }
+        populateStates(); // राज्यों की लिस्ट लोड करें
         init();
     };
 
